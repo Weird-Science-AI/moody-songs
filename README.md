@@ -2,7 +2,7 @@
 
 301 Final Project 
  
-Team Name: Team Water ??? Name Pending
+Team Name: Team Water Nation
 Chase McFaddin
 James Shreckengost
 Paulo Martin
