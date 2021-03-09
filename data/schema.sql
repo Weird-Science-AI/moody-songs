@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS playlist;
+
+CREATE TABLE playlist (
+  id SERIAL PRIMARY KEY,
+);

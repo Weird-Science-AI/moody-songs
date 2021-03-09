@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^3.2.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "passport": "^0.4.1",
+    "passport-spotify": "^2.0.0",
+    "pg": "^8.5.1",
+    "superagent": "^6.1.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "moody-songs",
+  "description": "301 Final Project",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Weird-Science-AI/moody-songs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Weird-Science-AI/moody-songs/issues"
+  },
+  "homepage": "https://github.com/Weird-Science-AI/moody-songs#readme"
+}
