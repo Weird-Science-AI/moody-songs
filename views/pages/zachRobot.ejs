@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="//unpkg.com/brain.js"></script>
+</head>
+<body>
+  <h1>hello world</h1>
+  <main id='d'></main>
+  <h2><%= emotion %></h2>
+  <h2>get my spotify playlist</h2>
+  <form action='/spotifyPlaylistResults' method='POST'>
+    <input type='hidden' name='emotionFromRobot' value='positive'>  <!--output from the robot goes here-->
+    <input type='submit' value='go get playlist'>
+  </form>
+  <script src='/styles/js/zach.js'></script>
+</body>
+</html>
