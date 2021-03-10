@@ -18,9 +18,13 @@
   },
   "homepage": "https://github.com/Weird-Science-AI/moody-songs#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "passport": "^0.4.1",
+    "passport-spotify": "^2.0.0",
     "pg": "^8.5.1",
     "superagent": "^6.1.0"
   }
