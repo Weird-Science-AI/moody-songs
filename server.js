@@ -12,7 +12,8 @@ const app = express();
 // const client = require('./client');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
-const session = require('express-session')
+const session = require('express-session');
+const { request } = require('http');
 
 // ============== App ===================================
 const PORT = process.env.PORT;
@@ -68,6 +69,8 @@ function robotPost(req, res){
           profile.accessToken = accessToken;
           console.log("🚀 ~ file: server.js ~ line 70 ~ profile.accessToken ", profile.accessToken )
           
+          profile.expires_in = 3;
+
           profile.refreshToken = refreshToken;
           console.log("🚀 ~ file: server.js ~ line 73 ~ profile.refreshToken", profile.refreshToken)
         
@@ -80,6 +83,10 @@ function robotPost(req, res){
 
 
   app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true })); // ASK JAMES
+
+
+
+
 
 
   //Initialize passport and session
@@ -160,7 +167,8 @@ function getSeeRobot(req, res){
   res.render('pages/seeRobot.ejs');
 }
 function getSpotifyPlaylistResults(req, res){
-  res.render('pages/playlist.ejs');
+
+  res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot});
 }
 
 app.listen(PORT, () => console.log(`up on http://localhost:${PORT}`));
