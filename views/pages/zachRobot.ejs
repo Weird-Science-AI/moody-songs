@@ -8,12 +8,12 @@
   <script src="//unpkg.com/brain.js"></script>
 </head>
 <body>
-  <h1>hello world</h1>
+  <h1>Hello World, I am Robo</h1>
   <main id='d'></main>
-  <h2><%= emotion %></h2>
+  <h2 id='robo'><%= emotion %></h2>
   <h2>get my spotify playlist</h2>
   <form action='/spotifyPlaylistResults' method='POST'>
-    <input type='hidden' name='emotionFromRobot' value='positive'>  <!--output from the robot goes here-->
+    <input type='hidden' name='emotionFromRobot' id='roboIdentify' value=''>  <!--output from the robot goes here-->
     <input type='submit' value='go get playlist'>
   </form>
   <a href='/'><button>Back to Home</button></a>
