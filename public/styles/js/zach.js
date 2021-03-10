@@ -185,5 +185,8 @@ function adjustSize(string) {
 function predictEmotion(string){
   return trainedNet(encode(adjustSize(string)));
 }
-var d = document.getElementById('d');
+let d = document.getElementById('d');
 d.innerHTML = brain.utilities.toSVG(net);
+
+let forRobot = document.getElementById('forRobot');
+forRobot.innerHTML = brain.utilities.toSVG(net);
