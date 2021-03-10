@@ -1,4 +1,6 @@
 'use strict';
+
+
 // ============== Packages ==============================
 const express = require('express');
 require('dotenv').config();
@@ -6,7 +8,7 @@ const superagent = require('superagent');
 const path = require('path')
 const pg = require('pg');
 const app = express();
-const cors = require("cors")
+// const cors = require("cors")
 // const client = require('./client');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
@@ -53,6 +55,7 @@ function robotPost(req, res){
         clientID: client_id,
         clientSecret: client_secret,
         callbackURL: redirect_uri + PORT + authCallbackPath,
+        
       },
       // from; https://github.com/JMPerez/passport-spotify/blob/master/examples/login/app.js
       function (accessToken, refreshToken, expires_in, profile, done) {
@@ -64,7 +67,12 @@ function robotPost(req, res){
           // and return that user instead.
           //set access and refresh tokens
           profile.accessToken = accessToken;
+          console.log("🚀 ~ file: server.js ~ line 70 ~ profile.accessToken ", profile.accessToken )
+          
           profile.refreshToken = refreshToken;
+          console.log("🚀 ~ file: server.js ~ line 73 ~ profile.refreshToken", profile.refreshToken)
+        
+          
           return done(null, profile);
         });
       }
@@ -80,8 +88,8 @@ function robotPost(req, res){
   app.use(passport.session());
 
 // ============== Spotify Routes ================================
-app.get('/auth/spotify', authUserWithScopes);
-app.get(authCallbackPath, checkLogin); // , (req, res) => { exampleApiCall(req, res); })
+app.get('/auth/spotify', authUserWithScopes());
+app.get(authCallbackPath, checkLogin(), (req, res) => { exampleApiCall(req, res); })
 app.get('/', getlanding);
 app.get('/sampleUseInfo', getUserData);
 
@@ -100,8 +108,6 @@ app.get('/sampleUseInfo', getUserData);
     }
       
 
-    
-
     function handelError(res) { // Stand Alone
       return err => {
         //log error
@@ -112,10 +118,10 @@ app.get('/sampleUseInfo', getUserData);
     }
 
     function exampleApiCall(req, res) { // Stand Alone
-      console.log("problem 3")
+      console.log(req.user)
 
       superagent.get("https://api.spotify.com/v1/me/top/tracks?limit=1&offset=1")
-        .auth(req.user.accessToken, { type: 'Bearer' })
+        .auth(req.user.accessToken, { type: 'bearer' })
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .then(data => {
