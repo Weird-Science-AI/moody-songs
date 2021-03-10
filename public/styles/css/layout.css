@@ -1,0 +1,19 @@
+h1 {
+  text-align: center;
+  font-size: 30px;
+  padding: 20px;
+}
+
+h2 {
+   text-align: center;
+   padding-top: 15px;
+}
+
+form {
+  text-align: center;
+  padding-top: 15px;
+}
+
+a {
+  text-align: center;
+}
