@@ -5,6 +5,19 @@ let longest ;
 train(getTrainingData());
 
 console.log(predictEmotion('today was a good day, didnt have to use my ak'));
+let fromUser = document.getElementById('robo');
+// let roboSays = predictEmotion(fromUser.innerHTML());
+console.log(predictEmotion(fromUser.innerHTML));
+let fromRobot = predictEmotion(fromUser.innerHTML)
+fromUser.innerHTML = `You are feeling positive: ${fromRobot.positive}%, you are feeling negative: ${fromRobot.negative}%.`;
+
+let form = document.getElementById('roboIdentify');
+
+if (predictEmotion(fromUser.innerHTML).positive > .5){
+  form.value = 'positive';
+}else {
+  form.value = "negative";
+}
 
 function train(data){
   net.train(processTrainingData(data), {
@@ -188,5 +201,5 @@ function predictEmotion(string){
 let d = document.getElementById('d');
 d.innerHTML = brain.utilities.toSVG(net);
 
-let forRobot = document.getElementById('forRobot');
-forRobot.innerHTML = brain.utilities.toSVG(net);
+// let forRobot = document.getElementById('forRobot');
+// forRobot.innerHTML = brain.utilities.toSVG(net);
