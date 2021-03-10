@@ -28,7 +28,7 @@ app.use(express.static(__dirname + '/public'));
 app.get('/', homeGet);
 app.post('/robotPost', robotPost);
 app.get('/seeRobot', getSeeRobot);
-// app.post('/spotifyPlaylistResults', getSpotifyPlaylistResults);
+app.post('/spotifyPlaylistResults', getSpotifyPlaylistResults);
 app.get('/popular', getFavorites);
 app.get('/aboutUs', getAboutUs);
 
@@ -44,7 +44,6 @@ function robotPost(req, res){
 
 
 // ============== Spotify ================================
-// function getSpotifyPlaylistResults(req, res){
   passport.serializeUser(function (user, done) { done(null, user); });
   passport.deserializeUser(function (obj, done) { done(null, obj); });
  
@@ -155,11 +154,13 @@ function getFavorites(req, res){
   res.render('pages/popular.ejs');
 }
 function getAboutUs(req, res){
-  res.render('pages/aboutUs');
+  res.render('pages/aboutUs.ejs');
 }
 function getSeeRobot(req, res){
-  res.render('pages/seeRobot');
+  res.render('pages/seeRobot.ejs');
 }
-
+function getSpotifyPlaylistResults(req, res){
+  res.render('pages/playlist.ejs');
+}
 
 app.listen(PORT, () => console.log(`up on http://localhost:${PORT}`));
