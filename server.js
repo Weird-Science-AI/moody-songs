@@ -194,7 +194,7 @@ function train(data){
   net.train(processTrainingData(data), {
     log: false,
     learningRate: 0.05,
-    iterations: 20000
+    iterations: 10000
   });
   trainedNet = net.toFunction();
 }
