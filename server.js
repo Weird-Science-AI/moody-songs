@@ -35,7 +35,6 @@ app.get('/', homeGet);
 app.post('/robotPost', robotPost);
 app.get('/seeRobot', getSeeRobot);
 app.post('/spotifyPlaylistResults', getSpotifyPlaylistResults);
-app.get('/popular', getFavorites);
 app.get('/aboutUs', getAboutUs);
 
 // ============== Routes ================================
@@ -161,14 +160,6 @@ function getUserData(req, res) {
 
 
 
-
-
-function getFavorites(req, res){
-  // console.log(req.body);
-  // right here is where the sql query for getting popular playlists goes
-  // send the favorites into the render function
-  res.render('pages/popular.ejs');
-}
 function getAboutUs(req, res){
   res.render('pages/aboutUs.ejs');
 }
