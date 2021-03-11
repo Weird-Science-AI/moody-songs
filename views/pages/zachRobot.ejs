@@ -9,18 +9,16 @@
   <link rel="stylesheet" href="../styles/css/base.css">
   <link rel="stylesheet" href="../styles/css/layout.css">
   <link rel="stylesheet" href="../styles/css/modules.css">
-  <script src="//unpkg.com/brain.js"></script>
 </head>
 <body>
   <h1>Hello World, I am Robo</h1>
-  <main id='d'></main>
-  <h2 id='robo'><%= emotion %></h2>
+  <div id='d'><img src='https://austingwalters.com/wp-content/uploads/2019/01/rnn.png'></div>
+  <h2 id='robo'><%= robotPrediction %></h2>
   <h2>get my spotify playlist</h2>
   <form action='/spotifyPlaylistResults' method='POST'>
-    <input type='hidden' name='emotionFromRobot' id='roboIdentify' value=''>  <!--output from the robot goes here-->
+    <input type='hidden' name='emotionFromRobot' id='roboIdentify' value='<%= formValue %>'>  <!--output from the robot goes here-->
     <input type='submit' value='go get playlist'>
   </form>
   <a href='/'><button>Back to Home</button></a>
-  <script src='/styles/js/zach.js'></script>
 </body>
 </html>
