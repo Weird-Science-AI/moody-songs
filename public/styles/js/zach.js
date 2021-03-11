@@ -13,7 +13,7 @@ fromUser.innerHTML = `You are feeling positive: ${fromRobot.positive}%, you are 
 
 let form = document.getElementById('roboIdentify');
 
-if (predictEmotion(fromUser.innerHTML).positive > .5){
+if (fromRobot.positive > .5){
   form.value = 'positive';
 }else {
   form.value = "negative";
