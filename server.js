@@ -41,11 +41,9 @@ app.get('/aboutUs', getAboutUs);
 
 // ============== Routes ================================
 function homeGet(req, res){
-  // console.log(req.body);
   res.render('pages/index.ejs');
 }
 function robotPost(req, res){
-
   const robotPrediction = robotPredict(req.body.emotion);
   let forForm = ''
   if (robotPrediction.positive > .5){
@@ -178,11 +176,17 @@ function getSeeRobot(req, res){
 }
 function getSpotifyPlaylistResults(req, res){
   const robotEmotion = req.body.emotionFromRobot;
-  const sqlString = `SELECT playlist, playlist_image_urls FROM spotifytable WHERE name_of_playlist LIKE '%${robotEmotion}%';`;
+  const sqlString = `SELECT playlist, playlist_image_urls, name_of_playlist FROM spotifytable;`;
   client.query(sqlString).then(playlistData => {
-    const playlistIDForEjs = playlistData.rows[0].playlist;
-    const playlistImages = playlistData.rows[0].playlist_image_urls;
-    console.log(playlistForEjs);
+    let playlistIDForEjs = '';
+    let playlistImages = '';
+    playlistData.rows.forEach(playlist => {
+      if (playlist.name_of_playlist.includes(robotEmotion)){
+        playlistIDForEjs = playlist.playlist;
+        playlistImages = playlist.playlist_image_urls;
+      }
+    });
+    
     res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlist: playlistIDForEjs, playlistImages: playlistImages});
   })
 }
