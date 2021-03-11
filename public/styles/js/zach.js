@@ -13,7 +13,7 @@ fromUser.innerHTML = `You are feeling positive: ${fromRobot.positive}%, you are 
 
 let form = document.getElementById('roboIdentify');
 
-if (predictEmotion(fromUser.innerHTML).positive > .5){
+if (fromRobot.positive > .5){
   form.value = 'positive';
 }else {
   form.value = "negative";
@@ -21,9 +21,9 @@ if (predictEmotion(fromUser.innerHTML).positive > .5){
 
 function train(data){
   net.train(processTrainingData(data), {
-    log: true,
+    log: false,
     learningRate: 0.05,
-    iterations: 20000
+    iterations: 2000
   });
   trainedNet = net.toFunction();
 }
@@ -34,7 +34,6 @@ function encode(str){
 
 function processTrainingData(data){
   const processedValues = data.map(d => {
-    console.log(d);
     return {
       input: encode(d.input),
       output: d.output
