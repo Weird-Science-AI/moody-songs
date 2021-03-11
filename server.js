@@ -35,7 +35,6 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/', homeGet);
 app.post('/robotPost', robotPost);
-app.get('/seeRobot', getSeeRobot);
 app.post('/spotifyPlaylistResults', getSpotifyPlaylistResults);
 app.get('/aboutUs', getAboutUs);
 
@@ -45,13 +44,13 @@ function homeGet(req, res){
 }
 function robotPost(req, res){
   const robotPrediction = robotPredict(req.body.emotion);
-  let forForm = ''
-  if (robotPrediction.positive > .5){
+  let forForm ;
+  if (robotPrediction.robotNumbers.positive > .5){
     forForm = 'positive';
   }else {
     forForm = 'negative';
   }
-  res.render('pages/zachRobot.ejs', {emotion: `${req.body.emotion}`, robotPrediction: robotPrediction, formValue: forForm});
+  res.render('pages/zachRobot.ejs', {emotion: `${req.body.emotion}`, robotPrediction: robotPrediction.sentence, formValue: forForm});
 }
 
 
@@ -171,9 +170,6 @@ function getUserData(req, res) {
 function getAboutUs(req, res){
   res.render('pages/aboutUs.ejs');
 }
-function getSeeRobot(req, res){
-  res.render('pages/seeRobot.ejs');
-}
 function getSpotifyPlaylistResults(req, res){
   const robotEmotion = req.body.emotionFromRobot;
   const sqlString = `SELECT playlist, playlist_image_urls, name_of_playlist FROM spotifytable;`;
@@ -182,6 +178,9 @@ function getSpotifyPlaylistResults(req, res){
     let playlistImages = '';
     playlistData.rows.forEach(playlist => {
       if (playlist.name_of_playlist.includes(robotEmotion)){
+        playlistIDForEjs = playlist.playlist;
+        playlistImages = playlist.playlist_image_urls;
+      }else if(playlist.name_of_playlist.includes(robotEmotion)){
         playlistIDForEjs = playlist.playlist;
         playlistImages = playlist.playlist_image_urls;
       }
@@ -195,7 +194,7 @@ function train(data){
   net.train(processTrainingData(data), {
     log: false,
     learningRate: 0.05,
-    iterations: 2000
+    iterations: 20000
   });
   trainedNet = net.toFunction();
 }
@@ -370,16 +369,8 @@ function predictEmotion(string){
   return trainedNet(encode(adjustSize(string)));
 }
 function robotPredict(emotion){
-  console.log(predictEmotion(emotion));
   let fromRobot = predictEmotion(emotion);
-// let form = document.getElementById('roboIdentify');
-
-// if (fromRobot.positive > .5){
-//   form.value = 'positive';
-// }else {
-//   form.value = "negative";
-// }
-  return `You are feeling positive: ${fromRobot.positive}%, you are feeling negative: ${fromRobot.negative}%.`;
+  return {sentence: `You are feeling positive: ${fromRobot.positive}%, you are feeling negative: ${fromRobot.negative}%.`, robotNumbers: fromRobot};
 }
 function trainNetwork(){
   train(getTrainingData());
