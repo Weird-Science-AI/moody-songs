@@ -2,6 +2,7 @@
 
 
 // ============== Packages ==============================
+const brain = require('./copiedBrain.js');
 const express = require('express');
 require('dotenv').config();
 const superagent = require('superagent');
@@ -24,8 +25,9 @@ const client_id = process.env.CLIENT_ID; // Spotify client id
 const client_secret = process.env.CLIENT_SECRET; // spotify Client secret
 const authCallbackPath = '/auth/spotify/callback';
 const redirect_uri = process.env.REDIRECT_URI; // redirect uri
-
-const playlists = [];
+const net = new brain.NeuralNetwork();
+let trainedNet ;
+let longest ;
 
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
@@ -33,18 +35,22 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/', homeGet);
 app.post('/robotPost', robotPost);
-app.get('/seeRobot', getSeeRobot);
 app.post('/spotifyPlaylistResults', getSpotifyPlaylistResults);
 app.get('/aboutUs', getAboutUs);
 
 // ============== Routes ================================
 function homeGet(req, res){
-  // console.log(req.body);
   res.render('pages/index.ejs');
 }
 function robotPost(req, res){
-  // const usersDay = {emotion: `${req.body.emotion}`};
-  res.render('pages/zachRobot.ejs', {emotion: `${req.body.emotion}`});
+  const robotPrediction = robotPredict(req.body.emotion);
+  let forForm ;
+  if (robotPrediction.robotNumbers.positive > .5){
+    forForm = 'positive';
+  }else {
+    forForm = 'negative';
+  }
+  res.render('pages/zachRobot.ejs', {emotion: `${req.body.emotion}`, robotPrediction: robotPrediction.sentence, formValue: forForm});
 }
 
 
@@ -137,9 +143,10 @@ function exampleApiCall(req, res) { // Stand Alone
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
     .then(data => {
+      console.log(data.body.items[0].images);
       data.body.items.forEach(item => {
-        const sqlQueryString = 'INSERT INTO spotifytable (playlist, client_id, client_secret, token, refresh_token) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING;';
-        const sqlQueryArray = [item.id, client_id, client_secret, token, refresh_token];
+        const sqlQueryString = 'INSERT INTO spotifytable (playlist, client_id, client_secret, token, refresh_token, name_of_playlist, playlist_image_urls) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT DO NOTHING;';
+        const sqlQueryArray = [item.id, client_id, client_secret, token, refresh_token, item.name.toLowerCase(), item.images];
         client.query(sqlQueryString, sqlQueryArray);
       });
       res.redirect('/');
@@ -163,18 +170,212 @@ function getUserData(req, res) {
 function getAboutUs(req, res){
   res.render('pages/aboutUs.ejs');
 }
-function getSeeRobot(req, res){
-  res.render('pages/seeRobot.ejs');
-}
 function getSpotifyPlaylistResults(req, res){
-  const sqlString = 'SELECT playlist FROM spotifytable;';
+  const robotEmotion = req.body.emotionFromRobot;
+  const sqlString = `SELECT playlist, playlist_image_urls, name_of_playlist FROM spotifytable;`;
   client.query(sqlString).then(playlistData => {
-    const playlistForEjs = playlistData.rows[0].playlist;
-    console.log(playlistForEjs);
-    res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlist: playlistForEjs});
+    let playlistIDForEjs = '';
+    let playlistImages = '';
+    playlistData.rows.forEach(playlist => {
+      if (playlist.name_of_playlist.includes(robotEmotion)){
+        playlistIDForEjs = playlist.playlist;
+        playlistImages = playlist.playlist_image_urls;
+      }else if(playlist.name_of_playlist.includes(robotEmotion)){
+        playlistIDForEjs = playlist.playlist;
+        playlistImages = playlist.playlist_image_urls;
+      }
+    });
+    
+    res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlist: playlistIDForEjs, playlistImages: playlistImages});
   })
 }
 
+function train(data){
+  net.train(processTrainingData(data), {
+    log: false,
+    learningRate: 0.05,
+    iterations: 20000
+  });
+  trainedNet = net.toFunction();
+}
+
+function encode(str){
+  return str.split('').map(x => (x.charCodeAt(0) / 400));
+}
+
+function processTrainingData(data){//---------------------------need this one
+  const processedValues = data.map(d => {
+    return {
+      input: encode(d.input),
+      output: d.output
+    }
+  });
+  console.log(processedValues);
+  return processedValues;
+}
+function getTrainingData(){//
+  const trainingData = [
+    {input: 'today was a great day', output: {positive: 1}},
+    {input: 'today was pretty great', output: {positive: 1}},
+    {input: 'today was a great day', output: {positive: 1}},
+    {input: 'i had a nice day today', output: {positive: 1}},
+    {input: 'today was fantastic', output: {positive: 1}},
+    {input: 'today was great', output: {positive: 1}},
+    {input: 'today i was so happy', output: {positive: 1}},
+    {input: 'today i got a raise', output: {positive: 1}},
+    {input: 'today i got everything done early', output: {positive: 1}},
+    {input: 'today i went on a date', output: {positive: 1}},
+    {input: 'my day was fantastic', output: {positive: 1}},
+    {input: 'my day was the best day', output: {positive: 1}},
+    {input: 'today i helped an old lady cross the road', output: {positive: 1}},
+    {input: 'my day was pretty good', output: {positive: 1}},
+    {input: 'my day was pretty decent', output: {positive: 1}},
+    {input: 'my day was pretty positive', output: {positive: 1}},
+    {input: 'my day was positive', output: {positive: 1}},
+    {input: 'my day was great', output: {positive: 1}},
+    {input: 'my day was incredible', output: {positive: 1}},
+    {input: 'it was great', output: {positive: 1}},
+    {input: 'it was fantastic', output: {positive: 1}},
+    {input: 'it as amazing', output: {positive: 1}},
+    {input: 'it was decent', output: {positive: 1}},
+    {input: 'it was the greatest', output: {positive: 1}},
+    // {input: 'it was not too bad', output: {positive: 1}},
+    {input: 'good', output: {positive: 1}},
+    {input: 'decent', output: {positive: 1}},
+    // {input: 'not bad', output: {positive: 1}},
+    // {input: 'not too bad', output: {positive: 1}},
+    {input: 'pretty good', output: {positive: 1}},
+    {input: 'great', output: {positive: 1}},
+    {input: 'amazing', output: {positive: 1}},
+    {input: 'quite fantastic', output: {positive: 1}},
+    {input: 'fantastic', output: {positive: 1}},
+    {input: 'superb', output: {positive: 1}},
+    {input: 'it was good', output: {positive: 1}},
+    {input: 'today was a good day, didnt have to use my ak', output: {positive: 1}},
+    {input: 'good day', output: {positive: 1}},
+    
+    {input: 'absolutely', output: {positive: 1}},
+    {input: 'beautiful', output: {positive: 1}},
+    {input: 'cheery', output: {positive: 1}},
+    {input: 'delightful', output: {positive: 1}},
+    {input: 'excellent', output: {positive: 1}},
+    {input: 'fabulous', output: {positive: 1}},
+    {input: 'gorgeous', output: {positive: 1}},
+    {input: 'heavenly', output: {positive: 1}},
+    {input: 'ideal', output: {positive: 1}},
+    {input: 'jovial', output: {positive: 1}},
+    {input: 'kind', output: {positive: 1}},
+    {input: 'lovely', output: {positive: 1}},
+    {input: 'marvelous', output: {positive: 1}},
+    {input: 'nice', output: {positive: 1}},
+    {input: 'optimistic', output: {positive: 1}},
+    {input: 'perfect', output: {positive: 1}},
+    {input: 'quality', output: {positive: 1}},
+    {input: 'remarkable', output: {positive: 1}},
+    {input: 'superb', output: {positive: 1}},
+    {input: 'terrific', output: {positive: 1}},
+    {input: 'unreal', output: {positive: 1}},
+    {input: 'vibrant', output: {positive: 1}},
+    {input: 'wondrous', output: {positive: 1}},
+    {input: 'yes', output: {positive: 1}},
+    {input: 'zeal', output: {positive: 1}},
+    // {input: '', output: {positive: 1}},
+
+    
+
+
+    {input: 'today sucked', output: {negative: 1}},
+    {input: 'today was pretty lame', output: {negative: 1}},
+    {input: 'i needed a boost today', output: {negative: 1}},
+    {input: 'my day was bad', output: {negative: 1}},
+    {input: 'it as a bad day', output: {negative: 1}},
+    {input: 'it was a really bad day', output: {negative: 1}},
+    {input: 'it was a terribly bad day', output: {negative: 1}},
+    {input: 'it was a horrible day', output: {negative: 1}},
+    {input: 'my day was a long one', output: {negative: 1}},
+    {input: 'my day was boring', output: {negative: 1}},
+    {input: 'my day was lame', output: {negative: 1}},
+    {input: 'my day was underwhelming', output: {negative: 1}},
+    {input: 'my day was less than ideal', output: {negative: 1}},
+    {input: 'my day sucked', output: {negative: 1}},
+    {input: 'today was super boring', output: {negative: 1}},
+    {input: 'today was a shitty day', output: {negative: 1}},
+    {input: 'i had a shitty day today', output: {negative: 1}},
+    {input: 'i stepped in dog poop', output: {negative: 1}},
+    {input: 'my wife left me', output: {negative: 1}},
+    {input: 'i lost all my money', output: {negative: 1}},
+    {input: 'i was depressed today', output: {negative: 1}},
+    {input: 'i felt depressed today', output: {negative: 1}},
+    {input: 'depressing', output: {negative: 1}},
+    {input: 'i was very sad today', output: {negative: 1}},
+    {input: 'i was very tired today', output: {negative: 1}},
+    {input: 'today went on forever', output: {negative: 1}},
+    {input: 'today drug on', output: {negative: 1}},
+    {input: 'today was a drag', output: {negative: 1}},
+    {input: 'my day sucked', output: {negative: 1}},
+    {input: 'today was so boring', output: {negative: 1}},
+    {input: 'today was boring', output: {negative: 1}},
+    {input: 'bad', output: {negative: 1}},
+    {input: 'terrible', output: {negative: 1}},
+    {input: 'horrendous', output: {negative: 1}},
+    {input: 'really bad', output: {negative: 1}},
+    {input: 'not good', output: {negative: 1}},
+    {input: 'pretty bad', output: {negative: 1}},
+    {input: 'not great', output: {negative: 1}},
+    {input: 'not amazing', output: {negative: 1}},
+    {input: 'not good at all', output: {negative: 1}},
+    {input: 'bad day', output: {negative: 1}},
+    
+    {input: 'awful', output: {negative: 1}},
+    {input: 'boring', output: {negative: 1}},
+    {input: 'cry', output: {negative: 1}},
+    {input: 'dreadful', output: {negative: 1}},
+    {input: 'evil', output: {negative: 1}},
+    {input: 'foul', output: {negative: 1}},
+    {input: 'ghastly', output: {negative: 1}},
+    {input: 'horrible', output: {negative: 1}},
+    {input: 'imperfect', output: {negative: 1}},
+    {input: 'junky', output: {negative: 1}},
+    {input: 'lousy', output: {negative: 1}},
+    {input: 'misshapen', output: {negative: 1}},
+    {input: 'negative', output: {negative: 1}},
+    {input: 'offensive', output: {negative: 1}},
+    {input: 'poor', output: {negative: 1}},
+    {input: 'questionable', output: {negative: 1}},
+    {input: 'revolting', output: {negative: 1}},
+    {input: 'stressful', output: {negative: 1}},
+    {input: 'terrible', output: {negative: 1}},
+    {input: 'unpleasant', output: {negative: 1}},
+    {input: 'vile', output: {negative: 1}},
+    {input: 'worthless', output: {negative: 1}},
+    {input: 'yucky', output: {negative: 1}},
+    // {input: '', output: {negative: 1}},
+  ];
+  longest = trainingData.reduce((a, b) =>
+    a.input.length > b.input.length ? a : b).input.length;
+  for (let i = 0; i < trainingData.length; i++) {
+    trainingData[i].input = adjustSize(trainingData[i].input);
+  }
+  return trainingData;
+}
+
+function adjustSize(string) {
+  while (string.length < longest) {
+    string += ' ';
+  }
+  return string; 
+}
+function predictEmotion(string){
+  return trainedNet(encode(adjustSize(string)));
+}
+function robotPredict(emotion){
+  let fromRobot = predictEmotion(emotion);
+  return {sentence: `You are feeling positive: ${fromRobot.positive}%, you are feeling negative: ${fromRobot.negative}%.`, robotNumbers: fromRobot};
+}
+function trainNetwork(){
+  train(getTrainingData());
+}
+trainNetwork();
 
 client.connect().then(() => {
   app.listen(PORT, () => console.log(`up on http://localhost:${PORT}`));
