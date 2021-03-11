@@ -25,6 +25,8 @@ const client_secret = process.env.CLIENT_SECRET; // spotify Client secret
 const authCallbackPath = '/auth/spotify/callback';
 const redirect_uri = process.env.REDIRECT_URI; // redirect uri
 
+const playlists = [];
+
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
@@ -131,17 +133,18 @@ function exampleApiCall(req, res) { // Stand Alone
   const client_secret = req.user.accessToken;
   const token = req.user.accessToken;
   const refresh_token = req.user.refreshToken;
-  superagent.get('https://api.spotify.com/v1/me/playlists?limit=1')
+  superagent.get('https://api.spotify.com/v1/me/playlists?')
     .auth(req.user.accessToken, { type: 'bearer' })
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
     .then(data => {
-      const sqlQueryString = 'INSERT INTO spotifytable (playlist, client_id, client_secret, token, refresh_token) VALUES ($1, $2, $3, $4, $5);';
-      const sqlQueryArray = [data.body.items[0].id, client_id, client_secret, token, refresh_token];
-      client.query(sqlQueryString, sqlQueryArray).then(result => {
-        console.log(result, 'this is from results');
-        res.redirect('/');
-      });});
+      data.body.items.forEach(item => {
+        const sqlQueryString = 'INSERT INTO spotifytable (playlist, client_id, client_secret, token, refresh_token) VALUES ($1, $2, $3, $4, $5) ON CONFLICT DO NOTHING;';
+        const sqlQueryArray = [item.id, client_id, client_secret, token, refresh_token];
+        client.query(sqlQueryString, sqlQueryArray);
+      });
+      res.redirect('/');
+    });
 }
 
 function getlanding(req, res) {
@@ -173,9 +176,14 @@ function getSeeRobot(req, res){
   res.render('pages/seeRobot.ejs');
 }
 function getSpotifyPlaylistResults(req, res){
-
-  res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot});
+  const sqlString = 'SELECT playlist FROM spotifytable;';
+  client.query(sqlString).then(playlistData => {
+    const playlistForEjs = playlistData.rows[0].playlist;
+    console.log(playlistForEjs);
+    res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlist: playlistForEjs});
+  })
 }
+
 
 client.connect().then(() => {
   app.listen(PORT, () => console.log(`up on http://localhost:${PORT}`));
