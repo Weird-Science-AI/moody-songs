@@ -8,49 +8,58 @@
   <link rel="stylesheet" href="../styles/css/base.css">
   <link rel="stylesheet" href="../styles/css/layout.css">
   <link rel="stylesheet" href="../styles/css/modules.css">
-  <title>Document</title>
+  <title>Homepage</title>
 </head>
 <body>
-  <h1>Hello! Welcome to Interactive Epoch.</h1>
+  <div id='index-wrapper'>
+    
 
-  <nav>
+    <nav>
+      <h1>Hello! Welcome to Interactive Epoch.</h1>
+      <h1>I'm Robo Your Playlist Guru</h1>
     <ul>
-      <li>Stuff here</li>
-      <li>Stuff here</li>
-      <li>Stuff here</li>
-      <li>Stuff here</li>
-      <li>Stuff here</li>
+      <li><a href='/aboutUs'><button>About Us</button></a> </li>
+      <li><a href="/auth/spotify"><button>Login with Spotify</button></a></li>
     </ul>
   </nav>
 
-  <div id='img_container'>
-    <img src='https://via.placeholder.com/900x150'>
-  </div>
-
-  <div id='form_robot'>
-    <h2>Tell me how your day was.</h2>
-    <form action='/robotPost' method='POST'>
-      <input type='text' name='emotion'>
-      <input type='submit' value='Submit'>
-    </form>
-  </div>
-  
-  <div id='submission'>
-    <a href='/aboutUs'><button>About Us</button></a>
-    <a href="/auth/spotify"><button>Login with Spotify</button></a>
-  </div>
-
-  <section id="robot_info">
-    <div id="right">
-      <img src="https://via.placeholder.com/150" id="zach"> 
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <div id='img_container'>
+      <img src='assets/robot_banner.jpg'>
     </div>
-    <div id="left">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <img src="https://via.placeholder.com/150" id="zach">
+
+    <div id='form_robot'>
+      <h2>Hi my name is Robo! How was your day?</h2>
+      <form action='/robotPost' method='POST'>
+        <input type='text' name='emotion'>
+        <input type='submit' value='Submit'>
+      </form>
     </div>
-</section>
+    
+    <section id="robot_info">
+      <div id="right">
+        <img href="https://www.ibm.com/cloud/learn/recurrent-neural-networks" src="assets/network.jpg"> 
+        <p> An Artilce from IMB referecnce that a recurrent neural network (RNN) is a type of artificial neural network which uses sequential data or time series data. These deep learning algorithms are commonly used for ordinal or temporal problems, such as language translation, natural language processing (nlp), speech recognition, and image captioning; they are incorporated into popular applications such as Siri, voice search, and Google Translate. Like feedforward and convolutional neural networks (CNNs), recurrent neural networks utilize training data to learn. They are distinguished by their “memory” as they take information from prior inputs to influence the current input and output. While traditional deep neural networks assume that inputs and outputs are independent of each other, the output of recurrent neural networks depend on the prior elements within the sequence.
+        
+        </p>
+      
+      </div>
+      
+      <div id="line-break"></div>
+      
+      <div id="left">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <img src="assets/brain.png">
+      </div>
 
+      <div id="line-break"></div>
 
+      <div id="right">
+        <img src="assets/RRN.png"> 
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </div>
+
+  </section>
+
+</div>
 </body>
 </html>

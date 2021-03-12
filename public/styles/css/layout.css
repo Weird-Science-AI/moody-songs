@@ -1,18 +1,33 @@
 /* INDEX PAGE */
+#index-wrapper{
+  background-image: url("/assets/Index-background.jpg");
+  background-position: center;
+  background-repeat: no-repeat; 
+  background-size: cover;
+}
+
 h1 {
   text-align: center;
   font-size: 70px;
   padding: 20px;
+  font-weight: bold;
+}
 
+nav li a button{
+  height: 50px;
+  width: 200px;
+  border-radius: 20px;
 }
 
 #img_container{
   display: flex;
   justify-content: center;
+  height: 500px;
 }
 
 #img_container img {
   padding: 40px 0px;
+  border-radius: 100px;
 }
 
 #text_box {
@@ -40,7 +55,7 @@ h1 {
 
 
 #form_robot form input {
-  height: 30px
+  height: 30px;
 }
 
 #submission {
@@ -54,17 +69,26 @@ h1 {
   padding: 20px 20px;
 }
 
-#submission a button{
-  height: 50px;
-  width: 200px;
-  border-radius: 20px;
-}
-
 #robot_info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0px 100px;
+  align-items: baseline;
+  padding: 30px 100px;
+}
+
+#robot_info p {
+  padding: 20px 20px;
+  font-weight: bold;
+  border-radius: 15px;
+  background-image: radial-gradient(rgb(163, 197, 200), rgb(15, 144, 219));
+}
+
+#robot_info img {
+  height: 200px;
+  border-radius: 25px;
+  padding: 0px 20px;
+
 }
 
 #left {
@@ -86,6 +110,14 @@ h1 {
 
 
 /* zachRobot */
+
+#playlist_wrapper{
+  background-image: url("/assets/playlist-banner.jpg");
+  background-position: center;
+  background-repeat: no-repeat; 
+  background-size: cover;
+}
+
 #robo {
   text-align: center;
   font-size: 50px;
@@ -101,6 +133,7 @@ h2 {
 #d {
   display: flex;
   justify-content: center;
+  height: 700px;
 }
 
 
@@ -113,10 +146,12 @@ h2 {
 
 #robo_playlist form input {
  padding: 0px 20px;
+ font-size: 25px;
 }
 
 #robo_playlist a button {
   padding: 0px 20px;
+  font-size: 25px;
 }
 
 /* playlist */
@@ -126,12 +161,32 @@ h2 {
   flex-wrap: wrap;
 }
 
+#Robo-Talk div {
+  display: flex;
+  justify-content: center;
+  background-image: url("/assets/about-us-background.jpg");
+  background-position: center;
+  background-repeat: no-repeat; 
+  background-size: cover;
+  font-weight: bold;
+  border-radius: 25px;
+  text-shadow: 2px 3px white;
+  opacity: 0.75;
+  text-emphasis-color: black;
+}
 
 iframe {
   font-size: 30px;
 }
 
 /* About Us */
+#about-us-wrapper{
+  background-image: url("/assets/name-tag.jpeg");
+  background-position: center;
+  background-repeat: no-repeat; 
+  background-size: cover;
+}
+
 #about_profile div {
   display: flex;
   flex-direction: row;
@@ -149,6 +204,40 @@ iframe {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  font-size: 25px;
   margin: 0px 300px;
+}
+
+#contact {
+  height: 100px;
+}
+
+#profile_pic {
+  height: 250px;
+  border-radius: 25px;
+}
+
+#about_profile div p {
+border-radius: 25px;
+background-image: linear-gradient(rgb(134, 169, 190), rgb(58, 86, 144));
+border: 5px solid black;
+opacity: 0.75;
+padding: 20px;
+font-weight: bold;
+}
+
+#nametag {
+  background-image: url("/assets/about-us-background.jpg");
+  background-position: center;
+  background-repeat: no-repeat; 
+  background-size: cover;
+  font-weight: bold;
+  width: 600px;
+  border-radius: 25px;
+  text-shadow: 2px 3px white;
+  opacity: 0.75;
+  text-emphasis-color: black;
+  }
+
+#contact {
+  border-radius: 40px;
 }
