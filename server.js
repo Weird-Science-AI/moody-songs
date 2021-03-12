@@ -397,7 +397,6 @@ const trainingData = [
     {input: 'yucky', output: {negative: 1}},
     // {input: '', output: {negative: 1}},
 ];
-
 trainNetwork();
 
 client.connect().then(() => {
