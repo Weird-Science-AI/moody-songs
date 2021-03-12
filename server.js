@@ -184,7 +184,7 @@ function getSpotifyPlaylistResults(req, res){
         // playlistIDForEjs = playlist.playlist;
         // playlistImages = playlist.playlist_image_urls;
       }else if(playlist.name_of_playlist.includes(robotEmotion)){
-        negativePlaylsits.push(playlist);
+        negativePlaylists.push(playlist);
         // playlistIDForEjs = playlist.playlist;
         // playlistImages = playlist.playlist_image_urls;
       }
