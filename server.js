@@ -64,7 +64,7 @@ passport.use(
     {
       clientID: client_id,
       clientSecret: client_secret,
-      callbackURL: redirect_uri + PORT + authCallbackPath,
+      callbackURL: redirect_uri + authCallbackPath,
 
     },
     // from; https://github.com/JMPerez/passport-spotify/blob/master/examples/login/app.js
