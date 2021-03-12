@@ -12,8 +12,6 @@ const pg = require('pg');
 const client = new pg.Client(DATABASE_URL);
 client.on('error', error => console.log(error));
 const app = express();
-// const cors = require("cors")
-// const client = require('./client');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const session = require('express-session');
@@ -28,6 +26,8 @@ const redirect_uri = process.env.REDIRECT_URI; // redirect uri
 const net = new brain.NeuralNetwork();
 let trainedNet ;
 let longest ;
+const positiveWords = ['amazing', 'awesome', 'angelic', 'brilliant', 'beautiful', 'cheery', 'cool', 'delightful', 'energetic', 'excellent', 'ecstatic', 'exciting', 'exquisite', 'fabulous', 'fantastic', 'good', 'great', 'heavenly', 'joy', 'lively', 'marvelous', 'nice', 'pleasant', 'positive', 'super', 'superb', 'terrific', 'upbeat', 'vibrant', 'wonderful', 'wholesome'];
+const negativeWords = ['abysmal', 'angry', 'atrocious', 'bad', 'boring', 'cold-hearted', 'dismal', 'dreadful', 'dreary', 'evil', 'foul', 'filthy', 'grim', 'hostile', 'hurt', 'horrible', 'mean', 'negative', 'oppressive', 'sad', 'scary', 'terrible', 'unhappy', ];
 
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
@@ -64,7 +64,7 @@ passport.use(
     {
       clientID: client_id,
       clientSecret: client_secret,
-      callbackURL: redirect_uri + PORT + authCallbackPath,
+      callbackURL: redirect_uri + authCallbackPath,
 
     },
     // from; https://github.com/JMPerez/passport-spotify/blob/master/examples/login/app.js
@@ -174,36 +174,60 @@ function getSpotifyPlaylistResults(req, res){
   const robotEmotion = req.body.emotionFromRobot;
   const sqlString = `SELECT playlist, playlist_image_urls, name_of_playlist FROM spotifytable;`;
   client.query(sqlString).then(playlistData => {
-    let playlistIDForEjs = '';
-    let playlistImages = '';
+    let positivePlaylists = [];
+    let negativePlaylists = [];
+    let playlistIDsForEjs = '';
     playlistData.rows.forEach(playlist => {
-      if (playlist.name_of_playlist.includes(robotEmotion)){
-        playlistIDForEjs = playlist.playlist;
-        playlistImages = playlist.playlist_image_urls;
-      }else if(playlist.name_of_playlist.includes(robotEmotion)){
-        playlistIDForEjs = playlist.playlist;
-        playlistImages = playlist.playlist_image_urls;
+      if (robotEmotion === 'positive') {
+        positiveWords.forEach(word => {
+          if (playlist.name_of_playlist.includes(word)) {
+            positivePlaylists.push(playlist);
+          }
+        });
+      } else if (robotEmotion === 'negative') {
+        negativeWords.forEach(word => {
+          if (playlist.name_of_playlist.includes(word)){
+            negativePlaylists.push(playlist);
+          }
+        });
       }
     });
+    if (robotEmotion === 'positive'){
+      console.log('got into positive if');
+      playlistIDsForEjs = generateRandomPlaylists(positivePlaylists);
+    } else if(robotEmotion === 'negative'){
+      console.log('got into negative if');
+      playlistIDsForEjs = generateRandomPlaylists(negativePlaylists);
+    }
     
-    res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlist: playlistIDForEjs, playlistImages: playlistImages});
-  })
+    
+    res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlists: playlistIDsForEjs});
+  });
 }
-
+function generateRandomPlaylists(typeOfPlaylist){
+  let p1 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+  let p2 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+  let p3 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+  while (p1 === p2 || p1 === p3 || p2 === p3){
+    p1 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+    p2 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+    p3 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+  }
+  return [p1, p2, p3];
+}
+// robot stuff goes below this line------------------------------------------
 function train(data){
   net.train(processTrainingData(data), {
     log: false,
     learningRate: 0.05,
-    iterations: 20000
+    iterations: 10000
   });
   trainedNet = net.toFunction();
 }
-
 function encode(str){
   return str.split('').map(x => (x.charCodeAt(0) / 400));
 }
-
-function processTrainingData(data){//---------------------------need this one
+function processTrainingData(data){
   const processedValues = data.map(d => {
     return {
       input: encode(d.input),
@@ -213,8 +237,31 @@ function processTrainingData(data){//---------------------------need this one
   console.log(processedValues);
   return processedValues;
 }
-function getTrainingData(){//
-  const trainingData = [
+function getTrainingData(){
+  longest = trainingData.reduce((a, b) =>
+    a.input.length > b.input.length ? a : b).input.length;
+  for (let i = 0; i < trainingData.length; i++) {
+    trainingData[i].input = adjustSize(trainingData[i].input);
+  }
+  return trainingData;
+}
+function adjustSize(string) {
+  while (string.length < longest) {
+    string += ' ';
+  }
+  return string; 
+}
+function predictEmotion(string){
+  return trainedNet(encode(adjustSize(string)));
+}
+function robotPredict(emotion){
+  let fromRobot = predictEmotion(emotion);
+  return {sentence: `You are feeling positive: ${fromRobot.positive}%, you are feeling negative: ${fromRobot.negative}%.`, robotNumbers: fromRobot};
+}
+function trainNetwork(){
+  train(getTrainingData());
+}
+const trainingData = [
     {input: 'today was a great day', output: {positive: 1}},
     {input: 'today was pretty great', output: {positive: 1}},
     {input: 'today was a great day', output: {positive: 1}},
@@ -239,11 +286,8 @@ function getTrainingData(){//
     {input: 'it as amazing', output: {positive: 1}},
     {input: 'it was decent', output: {positive: 1}},
     {input: 'it was the greatest', output: {positive: 1}},
-    // {input: 'it was not too bad', output: {positive: 1}},
     {input: 'good', output: {positive: 1}},
     {input: 'decent', output: {positive: 1}},
-    // {input: 'not bad', output: {positive: 1}},
-    // {input: 'not too bad', output: {positive: 1}},
     {input: 'pretty good', output: {positive: 1}},
     {input: 'great', output: {positive: 1}},
     {input: 'amazing', output: {positive: 1}},
@@ -279,6 +323,8 @@ function getTrainingData(){//
     {input: 'wondrous', output: {positive: 1}},
     {input: 'yes', output: {positive: 1}},
     {input: 'zeal', output: {positive: 1}},
+    {input: 'pineapple', output: {positive: 1}},
+    {input: 'pineapples', output: {positive: 1}},
     // {input: '', output: {positive: 1}},
 
     
@@ -350,31 +396,8 @@ function getTrainingData(){//
     {input: 'worthless', output: {negative: 1}},
     {input: 'yucky', output: {negative: 1}},
     // {input: '', output: {negative: 1}},
-  ];
-  longest = trainingData.reduce((a, b) =>
-    a.input.length > b.input.length ? a : b).input.length;
-  for (let i = 0; i < trainingData.length; i++) {
-    trainingData[i].input = adjustSize(trainingData[i].input);
-  }
-  return trainingData;
-}
+];
 
-function adjustSize(string) {
-  while (string.length < longest) {
-    string += ' ';
-  }
-  return string; 
-}
-function predictEmotion(string){
-  return trainedNet(encode(adjustSize(string)));
-}
-function robotPredict(emotion){
-  let fromRobot = predictEmotion(emotion);
-  return {sentence: `You are feeling positive: ${fromRobot.positive}%, you are feeling negative: ${fromRobot.negative}%.`, robotNumbers: fromRobot};
-}
-function trainNetwork(){
-  train(getTrainingData());
-}
 trainNetwork();
 
 client.connect().then(() => {
