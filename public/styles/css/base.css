@@ -1,4 +1,21 @@
 body {
-  background-color: aliceblue;
-  
+  background-color: rgba(96, 123, 243, 0.746);
+}
+
+nav  {
+  background-color: rgb(56, 70, 143)
+}
+
+nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+nav ul li {
+  padding: 5px 20px;
+  margin: 0px 25px;
+  font-size: 40px;
+  background-color: rgb(36, 186, 206)
 }

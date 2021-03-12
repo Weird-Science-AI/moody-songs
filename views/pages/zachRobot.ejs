@@ -15,10 +15,13 @@
   <div id='d'><img src='https://austingwalters.com/wp-content/uploads/2019/01/rnn.png'></div>
   <h2 id='robo'><%= robotPrediction %></h2>
   <h2>get my spotify playlist</h2>
-  <form action='/spotifyPlaylistResults' method='POST'>
-    <input type='hidden' name='emotionFromRobot' id='roboIdentify' value='<%= formValue %>'>  <!--output from the robot goes here-->
-    <input type='submit' value='go get playlist'>
-  </form>
-  <a href='/'><button>Back to Home</button></a>
+  <div id='robo_playlist'>
+    <form action='/spotifyPlaylistResults' method='POST'>
+      <input type='hidden' name='emotionFromRobot' id='roboIdentify' value='<%= formValue %>'>  <!--output from the robot goes here-->
+      <input type='submit' value='Go to Mood Playlist'>
+    </form>
+    <a href='/'><button>Back to Home</button></a>
+  </div>
+  
 </body>
 </html>

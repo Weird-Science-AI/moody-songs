@@ -11,11 +11,11 @@
   <link rel="stylesheet" href="../styles/css/modules.css">
 </head>
 <body>
-  <h1>here are your playlists</h1>
-  <h2>emotion from robot is <%= emotions %></h2>
-  <img src='https://via.placeholder.com/300'>
-  <img src='https://via.placeholder.com/300'>
-  <iframe src="https://open.spotify.com/embed/playlist/<%= playlist %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+  <h1>Playlists</h1>
+  <h2>Robo says you are feeling <%= emotions %></h2>
+  <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[0] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+  <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[1] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+  <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[2] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
   <a href='/'><button>Back to Home</button></a>
 </body>
 </html>

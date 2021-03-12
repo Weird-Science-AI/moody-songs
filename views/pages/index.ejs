@@ -11,14 +11,46 @@
   <title>Document</title>
 </head>
 <body>
-  <h1>Hello! Welcome to our music app.</h1>
-  <img src='https://via.placeholder.com/350x150'>
-  <h2>Tell me how your day was in one sentence.</h2>
-  <form action='/robotPost' method='POST'>
-    <input type='text' name='emotion'>
-    <input type='submit' value='Submit'>
-  </form>
-  <a href='/aboutUs'><button>About Us</button></a>
-  <a href="/auth/spotify">Login with Spotify</a>
+  <h1>Hello! Welcome to Interactive Epoch.</h1>
+
+  <nav>
+    <ul>
+      <li>Stuff here</li>
+      <li>Stuff here</li>
+      <li>Stuff here</li>
+      <li>Stuff here</li>
+      <li>Stuff here</li>
+    </ul>
+  </nav>
+
+  <div id='img_container'>
+    <img src='https://via.placeholder.com/900x150'>
+  </div>
+
+  <div id='form_robot'>
+    <h2>Tell me how your day was.</h2>
+    <form action='/robotPost' method='POST'>
+      <input type='text' name='emotion'>
+      <input type='submit' value='Submit'>
+    </form>
+  </div>
+  
+  <div id='submission'>
+    <a href='/aboutUs'><button>About Us</button></a>
+    <a href="/auth/spotify"><button>Login with Spotify</button></a>
+  </div>
+
+  <section id="robot_info">
+    <div id="right">
+      <img src="https://via.placeholder.com/150" id="zach"> 
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+    <div id="left">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <img src="https://via.placeholder.com/150" id="zach">
+    </div>
+</section>
+
+
 </body>
 </html>
