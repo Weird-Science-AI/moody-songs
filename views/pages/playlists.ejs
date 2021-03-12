@@ -4,18 +4,37 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Playlistst</title>
   <link rel="stylesheet" href="../styles/css/reset.css">
   <link rel="stylesheet" href="../styles/css/base.css">
   <link rel="stylesheet" href="../styles/css/layout.css">
   <link rel="stylesheet" href="../styles/css/modules.css">
 </head>
 <body>
-  <h1>Playlists</h1>
-  <h2>Robo says you are feeling <%= emotions %></h2>
-  <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[0] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-  <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[1] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-  <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[2] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-  <a href='/'><button>Back to Home</button></a>
+  <nav>
+    <h1>Robo Playlist</h1>
+    <ul>
+      <li><a href='/aboutUs'><button>About Us</button></a> </li>
+      <li><a href='/'><button>Back to Home</button></a></li>
+      <li><a href="/auth/spotify"><button>Login with Spotify</button></a></li>
+    </ul>
+  </nav>
+
+  <div id='playlist_wrapper'>
+    <div id="img_container">
+      <img src='assets/robot_banner.jpg'>
+    </div>
+    <div id="Robo-Talk">
+      <div>
+        <h2>Robo Has determined you mood is.... <%= emotions %> </h2>
+      </div>
+    </div>
+    <div id='music_container'>
+      <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[0] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[1] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <iframe src="https://open.spotify.com/embed/playlist/<%= playlists[2] %>"" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    </div>
+
+  </div>
 </body>
 </html>

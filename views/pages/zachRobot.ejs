@@ -4,24 +4,37 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Robo</title>
   <link rel="stylesheet" href="../styles/css/reset.css">
   <link rel="stylesheet" href="../styles/css/base.css">
   <link rel="stylesheet" href="../styles/css/layout.css">
   <link rel="stylesheet" href="../styles/css/modules.css">
 </head>
 <body>
-  <h1>Hello World, I am Robo</h1>
-  <div id='d'><img src='https://austingwalters.com/wp-content/uploads/2019/01/rnn.png'></div>
+
+  <nav>
+    <h1>Hello World, I am Robo!!!</h1>
+    <ul>
+      <li><a href='/aboutUs'><button>About Us</button></a> </li>
+      <li><a href='/'><button>Back to Home</button></a></li>
+      <li><a href="/auth/spotify"><button>Login with Spotify</button></a></li>
+    </ul>
+  </nav>
+
+  <div id="img_container">
+    <img src='assets/robo-container.jpg'>
+</div>
+
+  
   <h2 id='robo'><%= robotPrediction %></h2>
-  <h2>get my spotify playlist</h2>
   <div id='robo_playlist'>
     <form action='/spotifyPlaylistResults' method='POST'>
       <input type='hidden' name='emotionFromRobot' id='roboIdentify' value='<%= formValue %>'>  <!--output from the robot goes here-->
       <input type='submit' value='Go to Mood Playlist'>
     </form>
-    <a href='/'><button>Back to Home</button></a>
   </div>
+
+  <div id='d'> <img src='assets/recurrent-neural-networks.png'></div>
   
 </body>
 </html>
