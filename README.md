@@ -199,3 +199,7 @@ Feature Tasks
 Acceptance Tests
 * Navigate to the About us page
 * Names, photos, and short bios are properly displayed
+
+# credits/resources
+* https://jsfiddle.net/8Lvynxz5/38/
+* https://github.com/BrainJS/brain.js/issues/188

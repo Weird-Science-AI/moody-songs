@@ -12,8 +12,6 @@ const pg = require('pg');
 const client = new pg.Client(DATABASE_URL);
 client.on('error', error => console.log(error));
 const app = express();
-// const cors = require("cors")
-// const client = require('./client');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const session = require('express-session');
@@ -180,7 +178,6 @@ function getSpotifyPlaylistResults(req, res){
     let negativePlaylists = [];
     let playlistIDsForEjs = '';
     playlistData.rows.forEach(playlist => {
-
       if (robotEmotion === 'positive') {
         positiveWords.forEach(word => {
           if (playlist.name_of_playlist.includes(word)) {
@@ -192,14 +189,8 @@ function getSpotifyPlaylistResults(req, res){
           if (playlist.name_of_playlist.includes(word)){
             negativePlaylists.push(playlist);
           }
-        })
+        });
       }
-
-      // if (playlist.name_of_playlist.includes(robotEmotion) && robotEmotion === 'positive'){
-      //   positivePlaylists.push(playlist);
-      // }else if(playlist.name_of_playlist.includes(robotEmotion)){
-      //   negativePlaylists.push(playlist);
-      // }
     });
     if (robotEmotion === 'positive'){
       console.log('got into positive if');
@@ -211,7 +202,7 @@ function getSpotifyPlaylistResults(req, res){
     
     
     res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlists: playlistIDsForEjs});
-  })
+  });
 }
 function generateRandomPlaylists(typeOfPlaylist){
   let p1 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
@@ -246,8 +237,31 @@ function processTrainingData(data){
   console.log(processedValues);
   return processedValues;
 }
-function getTrainingData(){// here is where you can update training data
-  const trainingData = [
+function getTrainingData(){
+  longest = trainingData.reduce((a, b) =>
+    a.input.length > b.input.length ? a : b).input.length;
+  for (let i = 0; i < trainingData.length; i++) {
+    trainingData[i].input = adjustSize(trainingData[i].input);
+  }
+  return trainingData;
+}
+function adjustSize(string) {
+  while (string.length < longest) {
+    string += ' ';
+  }
+  return string; 
+}
+function predictEmotion(string){
+  return trainedNet(encode(adjustSize(string)));
+}
+function robotPredict(emotion){
+  let fromRobot = predictEmotion(emotion);
+  return {sentence: `You are feeling positive: ${fromRobot.positive}%, you are feeling negative: ${fromRobot.negative}%.`, robotNumbers: fromRobot};
+}
+function trainNetwork(){
+  train(getTrainingData());
+}
+const trainingData = [
     {input: 'today was a great day', output: {positive: 1}},
     {input: 'today was pretty great', output: {positive: 1}},
     {input: 'today was a great day', output: {positive: 1}},
@@ -272,11 +286,8 @@ function getTrainingData(){// here is where you can update training data
     {input: 'it as amazing', output: {positive: 1}},
     {input: 'it was decent', output: {positive: 1}},
     {input: 'it was the greatest', output: {positive: 1}},
-    // {input: 'it was not too bad', output: {positive: 1}},
     {input: 'good', output: {positive: 1}},
     {input: 'decent', output: {positive: 1}},
-    // {input: 'not bad', output: {positive: 1}},
-    // {input: 'not too bad', output: {positive: 1}},
     {input: 'pretty good', output: {positive: 1}},
     {input: 'great', output: {positive: 1}},
     {input: 'amazing', output: {positive: 1}},
@@ -312,6 +323,8 @@ function getTrainingData(){// here is where you can update training data
     {input: 'wondrous', output: {positive: 1}},
     {input: 'yes', output: {positive: 1}},
     {input: 'zeal', output: {positive: 1}},
+    {input: 'pineapple', output: {positive: 1}},
+    {input: 'pineapples', output: {positive: 1}},
     // {input: '', output: {positive: 1}},
 
     
@@ -383,30 +396,8 @@ function getTrainingData(){// here is where you can update training data
     {input: 'worthless', output: {negative: 1}},
     {input: 'yucky', output: {negative: 1}},
     // {input: '', output: {negative: 1}},
-  ];
-  longest = trainingData.reduce((a, b) =>
-    a.input.length > b.input.length ? a : b).input.length;
-  for (let i = 0; i < trainingData.length; i++) {
-    trainingData[i].input = adjustSize(trainingData[i].input);
-  }
-  return trainingData;
-}
-function adjustSize(string) {
-  while (string.length < longest) {
-    string += ' ';
-  }
-  return string; 
-}
-function predictEmotion(string){
-  return trainedNet(encode(adjustSize(string)));
-}
-function robotPredict(emotion){
-  let fromRobot = predictEmotion(emotion);
-  return {sentence: `You are feeling positive: ${fromRobot.positive}%, you are feeling negative: ${fromRobot.negative}%.`, robotNumbers: fromRobot};
-}
-function trainNetwork(){
-  train(getTrainingData());
-}
+];
+
 trainNetwork();
 
 client.connect().then(() => {
