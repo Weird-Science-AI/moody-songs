@@ -28,6 +28,8 @@ const redirect_uri = process.env.REDIRECT_URI; // redirect uri
 const net = new brain.NeuralNetwork();
 let trainedNet ;
 let longest ;
+const positiveWords = ['amazing', 'awesome', 'angelic', 'brilliant', 'beautiful', 'cheery', 'cool', 'delightful', 'energetic', 'excellent', 'ecstatic', 'exciting', 'exquisite', 'fabulous', 'fantastic', 'good', 'great', 'heavenly', 'joy', 'lively', 'marvelous', 'nice', 'pleasant', 'positive', 'super', 'superb', 'terrific', 'upbeat', 'vibrant', 'wonderful', 'wholesome'];
+const negativeWords = ['abysmal', 'angry', 'atrocious', 'bad', 'boring', 'cold-hearted', 'dismal', 'dreadful', 'dreary', 'evil', 'foul', 'filthy', 'grim', 'hostile', 'hurt', 'horrible', 'mean', 'negative', 'oppressive', 'sad', 'scary', 'terrible', 'unhappy', ];
 
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
@@ -178,11 +180,26 @@ function getSpotifyPlaylistResults(req, res){
     let negativePlaylists = [];
     let playlistIDsForEjs = '';
     playlistData.rows.forEach(playlist => {
-      if (playlist.name_of_playlist.includes(robotEmotion) && robotEmotion === 'positive'){
-        positivePlaylists.push(playlist);
-      }else if(playlist.name_of_playlist.includes(robotEmotion)){
-        negativePlaylists.push(playlist);
+
+      if (robotEmotion === 'positive') {
+        positiveWords.forEach(word => {
+          if (playlist.name_of_playlist.includes(word)) {
+            positivePlaylists.push(playlist);
+          }
+        });
+      } else if (robotEmotion === 'negative') {
+        negativeWords.forEach(word => {
+          if (playlist.name_of_playlist.includes(word)){
+            negativePlaylists.push(playlist);
+          }
+        })
       }
+
+      // if (playlist.name_of_playlist.includes(robotEmotion) && robotEmotion === 'positive'){
+      //   positivePlaylists.push(playlist);
+      // }else if(playlist.name_of_playlist.includes(robotEmotion)){
+      //   negativePlaylists.push(playlist);
+      // }
     });
     if (robotEmotion === 'positive'){
       console.log('got into positive if');
@@ -207,7 +224,7 @@ function generateRandomPlaylists(typeOfPlaylist){
   }
   return [p1, p2, p3];
 }
-
+// robot stuff goes below this line------------------------------------------
 function train(data){
   net.train(processTrainingData(data), {
     log: false,
@@ -216,12 +233,10 @@ function train(data){
   });
   trainedNet = net.toFunction();
 }
-
 function encode(str){
   return str.split('').map(x => (x.charCodeAt(0) / 400));
 }
-
-function processTrainingData(data){//---------------------------need this one
+function processTrainingData(data){
   const processedValues = data.map(d => {
     return {
       input: encode(d.input),
@@ -231,7 +246,7 @@ function processTrainingData(data){//---------------------------need this one
   console.log(processedValues);
   return processedValues;
 }
-function getTrainingData(){//
+function getTrainingData(){// here is where you can update training data
   const trainingData = [
     {input: 'today was a great day', output: {positive: 1}},
     {input: 'today was pretty great', output: {positive: 1}},
@@ -376,7 +391,6 @@ function getTrainingData(){//
   }
   return trainingData;
 }
-
 function adjustSize(string) {
   while (string.length < longest) {
     string += ' ';
