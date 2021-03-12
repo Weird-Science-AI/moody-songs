@@ -176,32 +176,36 @@ function getSpotifyPlaylistResults(req, res){
   client.query(sqlString).then(playlistData => {
     let positivePlaylists = [];
     let negativePlaylists = [];
-    let playlistIDForEjs = '';
-    let playlistImages = '';
+    let playlistIDsForEjs = '';
     playlistData.rows.forEach(playlist => {
       if (playlist.name_of_playlist.includes(robotEmotion) && robotEmotion === 'positive'){
         positivePlaylists.push(playlist);
-        // playlistIDForEjs = playlist.playlist;
-        // playlistImages = playlist.playlist_image_urls;
       }else if(playlist.name_of_playlist.includes(robotEmotion)){
         negativePlaylists.push(playlist);
-        // playlistIDForEjs = playlist.playlist;
-        // playlistImages = playlist.playlist_image_urls;
       }
     });
     if (robotEmotion === 'positive'){
-      let randomPlaylist = Math.floor(Math.random() * positivePlaylists.length);
-      playlistIDForEjs = positivePlaylists[randomPlaylist].playlist;
-      playlistImages = positivePlaylists[randomPlaylist].playlist_image_urls;
+      console.log('got into positive if');
+      playlistIDsForEjs = generateRandomPlaylists(positivePlaylists);
     } else if(robotEmotion === 'negative'){
-      let randomPlaylist = Math.floor(Math.random() * negativePlaylists.length);
-      playlistIDForEjs = negativePlaylists[randomPlaylist].playlist;
-      playlistImages = negativePlaylists[randomPlaylist].playlist_image_urls;
+      console.log('got into negative if');
+      playlistIDsForEjs = generateRandomPlaylists(negativePlaylists);
     }
     
     
-    res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlist: playlistIDForEjs, playlistImages: playlistImages});
+    res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlists: playlistIDsForEjs});
   })
+}
+function generateRandomPlaylists(typeOfPlaylist){
+  let p1 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+  let p2 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+  let p3 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+  while (p1 === p2 || p1 === p3 || p2 === p3){
+    p1 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+    p2 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+    p3 = typeOfPlaylist[Math.floor(Math.random() * typeOfPlaylist.length)].playlist;
+  }
+  return [p1, p2, p3];
 }
 
 function train(data){
