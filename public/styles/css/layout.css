@@ -1,19 +1,154 @@
+/* INDEX PAGE */
 h1 {
   text-align: center;
-  font-size: 30px;
+  font-size: 70px;
+  padding: 20px;
+
+}
+
+#img_container{
+  display: flex;
+  justify-content: center;
+}
+
+#img_container img {
+  padding: 40px 0px;
+}
+
+#text_box {
+  width: 600px;
+  height: 30px;
+  font-size: 20px;
+}
+
+#form_robot {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#form_robot h2 {
+  font-size: 50px;
+  padding: 0px 0px 20px;
+}
+
+#form_robot form {
+  display: flex;
+  flex-direction: column;
+}
+
+
+#form_robot form input {
+  height: 30px
+}
+
+#submission {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+}
+
+#submission a {
+  padding: 20px 20px;
+}
+
+#submission a button{
+  height: 50px;
+  width: 200px;
+  border-radius: 20px;
+}
+
+#robot_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0px 100px;
+}
+
+#left {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 25px;
+}
+
+
+#right {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 25px;
+}
+
+
+/* zachRobot */
+#robo {
+  text-align: center;
+  font-size: 50px;
   padding: 20px;
 }
 
 h2 {
-   text-align: center;
-   padding-top: 15px;
+  text-align: center;
+  font-size: 50px;
+  padding: 20px;
 }
 
-form {
-  text-align: center;
-  padding-top: 15px;
+#d {
+  display: flex;
+  justify-content: center;
 }
 
-a {
-  text-align: center;
+
+#robo_playlist {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+}
+
+#robo_playlist form input {
+ padding: 0px 20px;
+}
+
+#robo_playlist a button {
+  padding: 0px 20px;
+}
+
+/* playlist */
+#music_container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+iframe {
+  font-size: 30px;
+}
+
+/* About Us */
+#about_profile div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 25px;
+  margin: 25px 300px;
+}
+
+#about_profile img {
+  padding: 0px 15px;
+}
+
+#about_profile article {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  font-size: 25px;
+  margin: 0px 300px;
 }
