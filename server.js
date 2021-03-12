@@ -219,7 +219,7 @@ function generateRandomPlaylists(typeOfPlaylist){
 function train(data){
   net.train(processTrainingData(data), {
     log: false,
-    learningRate: 0.05,
+    learningRate: 0.03,
     iterations: 10000
   });
   trainedNet = net.toFunction();
