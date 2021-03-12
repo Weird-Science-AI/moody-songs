@@ -1,45 +1,13 @@
-# moody-songs
+# Interactive Epoch
 
 301 Final Project 
  
 Team Name: Team Water Nationcd
 Chase McFaddin
-James Shreckengost
 Paulo Martin
 Zach Hornung
- 
-Prep #1
-Communication Plan-
-Set for 20 minutes at the beginning of our meeting and toward the end of our meeting for important topics .- If anyone has different idea we will be respectfully listen and provide feed back and allow everyone to speak- Keep notifications for Slack ON!
-- If not present, present members will carry on daily tasks and will inform the missing member via Text and Slack.
-Conflict Plan1. Address Conflicts- Have a possible solution so that we can address the problem in an efficient and timely manner.- Conflicts will be discussed and voted on for further advancement.
- 
-2. Go around the table for ideas to resolve conflicts. If conflict is beyond our knowledge or voting ends in a stalemate, a TA or Nicholas will be contacted for advice.
- 
-3. No-shows    
-- Absentee must inform other team members on their absence.   
- - If absentee continues to be late/absent without notice, tasks will be divided between remaining members.
-4. Group meeting will continue to perform as usual. Missing member will be informed via Text and Slack and will be expected to complete their tasks on time.
-Work Plan
-1. Split up major tasks evenly   
- - Talk about the current status of our tasks at the beginning and ending of our meeting.
-2. When you are finished with your task.   
- - Inform teammates    
-- Pick up another task OR help a teammate on their major task
- 
-Git Process
-* One group member will make the master branch repo, then we will make a “dev” branch where each group person branches off that. Everyone handles PRs together. One PR per scheduled work night minimum. Merge Dev to main daily. We then push to the dev branch with 1 pier review required and set a 3 person permission limit to push to main.
- 
-Selfcare
-Any thing else you feel is important: expectations around work times, stand-up times(outside of the ones schedule with the instructional team), taking breaks/seeking help when you’re stuck, etc.
 
-
-=========================================================
-
-
-Prep #2
-
-Name of Project: ??? Soundtrack of your day ??? Working Title
+Name of Project: Interactive Epoch
 
 1. Summary of idea
 We would like to build an app that will allow users to listen to music that reflects their mood of the day. We will have the user input how their day went, then our neural network AI will determine their mood and suggest a Spotify playlist. Then it grab images from google that reflect that mood as well. The CSS will then add mood lighting and background to the app as well.
@@ -66,8 +34,6 @@ CSS will alter the background and/or lighting to reflect the current mood
 
 Stretch goals  
 Incorporating additional neural networks that communicate with each other
-
-
 
 ========================================================
 
@@ -109,12 +75,11 @@ Non-Functional Requirements
 * Usability: This app is intended to be very user friendly and keeps in mind the accessibility standards to make this app as inclusive as possible.
 * Compatibility: This app is compatible with Windows and Apple OS as well as in any standard browser.
 
-----------README-----------------
-
-Soundtrack to your Day
+Overview:
 
 We would like to build an app that will allow us to enjoy our date night by going through D8 Night app and selecting the categories that are important to us based on the selection that is given.
 An application for users to help them select from various categories in order to plan out the perfect date night. Users may search between categories of recipes, cocktails, movies, tv shows, workout ideas, nearby events, music playlists, and finding a new book to share.
+
 MVP:
 * We would like to have a minimum of 3 APIs to set our categories to choose from
 * We will use routes to access the APIs and narrow down the selection within each category
@@ -203,3 +168,13 @@ Acceptance Tests
 # credits/resources
 * https://jsfiddle.net/8Lvynxz5/38/
 * https://github.com/BrainJS/brain.js/issues/188
+* https://github.com/JMPerez/spotify-web-api-js
+* https://github.com/JMPerez/passport-spotify 
+* https://developer.spotify.com/documentation/
+* https://expressjs.com/
+* https://www.npmjs.com/package/pg-doc
+* https://visionmedia.github.io/superagent/
+* https://ejs.co/ 
+* https://www.npmjs.com/package/dotenv 
+
+
