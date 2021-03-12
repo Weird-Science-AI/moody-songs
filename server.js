@@ -174,17 +174,31 @@ function getSpotifyPlaylistResults(req, res){
   const robotEmotion = req.body.emotionFromRobot;
   const sqlString = `SELECT playlist, playlist_image_urls, name_of_playlist FROM spotifytable;`;
   client.query(sqlString).then(playlistData => {
+    let positivePlaylists = [];
+    let negativePlaylists = [];
     let playlistIDForEjs = '';
     let playlistImages = '';
     playlistData.rows.forEach(playlist => {
-      if (playlist.name_of_playlist.includes(robotEmotion)){
-        playlistIDForEjs = playlist.playlist;
-        playlistImages = playlist.playlist_image_urls;
+      if (playlist.name_of_playlist.includes(robotEmotion) && robotEmotion === 'positive'){
+        positivePlaylists.push(playlist);
+        // playlistIDForEjs = playlist.playlist;
+        // playlistImages = playlist.playlist_image_urls;
       }else if(playlist.name_of_playlist.includes(robotEmotion)){
-        playlistIDForEjs = playlist.playlist;
-        playlistImages = playlist.playlist_image_urls;
+        negativePlaylsits.push(playlist);
+        // playlistIDForEjs = playlist.playlist;
+        // playlistImages = playlist.playlist_image_urls;
       }
     });
+    if (robotEmotion === 'positive'){
+      let randomPlaylist = Math.floor(Math.random() * positivePlaylists.length);
+      playlistIDForEjs = positivePlaylists[randomPlaylist].playlist;
+      playlistImages = positivePlaylists[randomPlaylist].playlist_image_urls;
+    } else if(robotEmotion === 'negative'){
+      let randomPlaylist = Math.floor(Math.random() * negativePlaylists.length);
+      playlistIDForEjs = negativePlaylists[randomPlaylist].playlist;
+      playlistImages = negativePlaylists[randomPlaylist].playlist_image_urls;
+    }
+    
     
     res.render('pages/playlists.ejs', {emotions: req.body.emotionFromRobot, playlist: playlistIDForEjs, playlistImages: playlistImages});
   })
